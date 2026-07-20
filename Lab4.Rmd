@@ -1,12 +1,12 @@
 ---
 title: "Lab 4"
 author: "Dylan Frith"
-date: "3/17/25"
+date: "6/18/26"
 output:
   pdf_document: default
 ---
 
-## 1. Automotive Tire Sales Modeling (2 points each part)
+## 1. Automotive Tire Sales Modeling
 
 Using the data from `TireSales.csv`, answer the following questions.
 
@@ -40,8 +40,7 @@ sorted_vif_values <- vif_values[order(-vif_values)]
 barplot(sorted_vif_values, col= "green", xlab = "Predictor Variables", main = "VIF values by Predictor")
 ```
 
-## 2. Automotive Tire Sales by Seller Type (2 points each part)
-
+## 2. Automotive Tire Sales by Seller Type 
 Using the data from `TireSales.csv`, answer the following questions.
 
  a. Construct boxplots of the number of sales by seller type.
@@ -67,7 +66,7 @@ anova(reg2)
  
 *At significance level of alpha = 0.05, we reject the null since the p-value < 0.05.*
 
-## 3.  Automotive Tire Sales by District (2 points each part)
+## 3.  Automotive Tire Sales by District 
 
 Using the data from `TireSales.csv`, answer the following questions.
 
@@ -95,7 +94,7 @@ anova(reg3)
 *At significance level of alpha = 0.05, we reject the null since the p-value < 0.05*
 
 
-## 4. Coral Gables Housing (3 points each part)
+## 4. Coral Gables Housing
 
 Jigar is interested in purchasing a house in Coral Gables and wants to get the largest total living area for the price.  He collects the size and sale price of 5 houses in a particular Coral Gables neighborhood.  The data shown here reflect the size (in square feet) and the sale price (in thousands of dollars).
 
@@ -132,7 +131,7 @@ d. Find a 95\% prediction interval for the price when the size of the house is 2
 predict(reg4, data.frame(Size = 2500), interval = "prediction")
 ```  
 
-## 5. Coral Gables Housing ANOVA (2 points each part)
+## 5. Coral Gables Housing ANOVA 
 
 Using the Coral Gables Housing data, do the following calculations without generating the ANOVA table (you will generate the ANOVA table in the next question).
 
@@ -168,7 +167,7 @@ F = MSR/MSE
 F
 ```
 
-## 6. Coral Gables Housing ANOVA in R (3 points each part)
+## 6. Coral Gables Housing ANOVA in R 
 
 Using the Coral Gables Housing data, do the following using R.
 
