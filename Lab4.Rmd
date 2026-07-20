@@ -1,0 +1,185 @@
+---
+title: "Lab 4"
+author: "Dylan Frith"
+date: "3/17/25"
+output:
+  pdf_document: default
+---
+
+## 1. Automotive Tire Sales Modeling (2 points each part)
+
+Using the data from `TireSales.csv`, answer the following questions.
+
+```{r}
+Tires_df = read.csv("https://www.businessregression.com/Data/TireSales.csv")
+```
+
+ a. Fit a linear model to predict the response variable (Sales) from the variables: `CompPrice`, `Income`, `Ads`, `Cars`, `Price` and `Age`. Display a summary of the model.
+ 
+```{r}
+reg = lm(Sales ~ CompPrice + Income + Ads + Cars + Price + Age, data = Tires_df)
+summary(reg)
+```
+
+ b.  Clearly state the regression equation.
+
+$$\hat{y} = 2.62989 + 0.09925x_1 -0.000368x_2 + 0.037698x_3 + 8.08225x_4 - 0.096608x_5 - 0.01575x_6$$
+
+ c. Calculate the VIF values corresponding to each predictor variable.
+
+```{r}
+library(car)
+vif_values = vif(reg)
+vif_values
+```
+
+ d. Construct a bar graph using the VIF values calculated above.
+
+```{r}
+sorted_vif_values <- vif_values[order(-vif_values)]
+barplot(sorted_vif_values, col= "green", xlab = "Predictor Variables", main = "VIF values by Predictor")
+```
+
+## 2. Automotive Tire Sales by Seller Type (2 points each part)
+
+Using the data from `TireSales.csv`, answer the following questions.
+
+ a. Construct boxplots of the number of sales by seller type.
+
+```{r}
+boxplot(Sales ~ SellerType, data = Tires_df, col = "turquoise", xlab = "Seller Type", ylab = "Sales", main = "Boxplots of Number of Sales by Seller Type")
+```
+
+ b. It is believed that sales are significantly different across the different seller types. Clearly state the null and alternative hypotheses.
+ 
+$$H_O: \mu_1 = \mu_2 = \mu_3$$
+$$H_A: \mu_1 \neq \mu_2 \neq \mu_3$$
+
+
+ c. Calculate the $F$ statistic.  
+ 
+```{r}
+reg2 = lm(Sales ~ SellerType, data = Tires_df)
+anova(reg2)
+```
+
+ d. Can you refute the null hypothesis using an $F$ test with a significance level of $\alpha=0.05$?  
+ 
+*At significance level of alpha = 0.05, we reject the null since the p-value < 0.05.*
+
+## 3.  Automotive Tire Sales by District (2 points each part)
+
+Using the data from `TireSales.csv`, answer the following questions.
+
+ a. Construct boxplots of the number of sales by district.
+
+```{r}
+boxplot(Sales ~ District, data = Tires_df, col = "red", xlab = "District", ylab = "Sales", main = "Number of Sales by District")
+```
+
+ b. It is believed that sales are significantly different across the different districts. Clearly state the null and alternative hypotheses.
+ 
+$$H_O: \mu_1 = \mu_2 = \mu_3 = \mu_4$$
+$$H_A: \mu_1 \neq \mu_2 \neq \mu_3 \neq \mu_4$$
+
+
+ c. Calculate the $F$ statistic.  
+ 
+```{r}
+reg3 = lm(Sales ~ District, data = Tires_df)
+anova(reg3)
+```
+
+ d. Can you refute the null hypothesis from the $F$ test with a significance level of $\alpha=0.05$?  
+ 
+*At significance level of alpha = 0.05, we reject the null since the p-value < 0.05*
+
+
+## 4. Coral Gables Housing (3 points each part)
+
+Jigar is interested in purchasing a house in Coral Gables and wants to get the largest total living area for the price.  He collects the size and sale price of 5 houses in a particular Coral Gables neighborhood.  The data shown here reflect the size (in square feet) and the sale price (in thousands of dollars).
+
+```{r}
+Size = c(2700, 3500, 2600, 5300, 4200)
+Price = c(650, 875, 670, 1200, 981)
+```
+
+Use the Coral Gables housing data from the previous problems and do the following using R.
+
+a. Print a summary of the regression equation that predicts price as a function of house size.
+  
+```{r}
+reg4 = lm(Price ~ Size)
+summary(reg4)
+```
+
+b. Use the regression equation to predict the price when the size of the house is 2500 square feet. **Hint:** `obs_x` has been given.
+
+```{r}
+obs_x = data.frame(Size = 2500)
+predict(reg4, data.frame(Size = 2500))
+```
+
+c. Find a 95\% confidence interval for the price when the size of the house is 2500 square feet.
+
+```{r}
+predict(reg4, data.frame(Size = 2500), interval = "confidence")
+```
+
+d. Find a 95\% prediction interval for the price when the size of the house is 2500 square feet.
+
+```{r}
+predict(reg4, data.frame(Size = 2500), interval = "prediction")
+```  
+
+## 5. Coral Gables Housing ANOVA (2 points each part)
+
+Using the Coral Gables Housing data, do the following calculations without generating the ANOVA table (you will generate the ANOVA table in the next question).
+
+ a. Calculate the $SSR$.
+ 
+```{r}
+yhat = reg4$fitted.values
+SSR = sum((yhat - mean(Price))^2)
+SSR
+```
+
+ b. Calculate the $SST$.
+
+```{r}
+SST = sum((Price - mean(Price))^2)
+SST
+```
+
+ c. Calculate the $MSR$. 
+
+```{r}
+MSR = SSR/1
+MSR
+```
+
+d. Calculate the $F$ statistic. 
+
+```{r}
+n = length(Size)
+SSE = SST - SSR
+MSE = SSE/(n-2)
+F = MSR/MSE
+F
+```
+
+## 6. Coral Gables Housing ANOVA in R (3 points each part)
+
+Using the Coral Gables Housing data, do the following using R.
+
+ a. Find the p-value of the $F$ statistic calculated in the previous problem using the `pf` function. 
+ 
+```{r}
+1-pf(F,1,n-2)
+```
+
+ b. Use the `anova` function to construct the ANOVA table.
+
+```{r}
+anova(reg4)
+```
